@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globe News — Live World News &amp; Radio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+
+        <header class="header-bar">
+            <div class="header-left">
+                <div class="wordmark">
+                    <svg class="wordmark-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span class="wordmark-text">Globe<strong>News</strong></span>
+                </div>
+            </div>
+
+            <div class="header-center">
+                <div class="search-wrapper">
+                    <div id="country-search" class="search-container">
+                        <select id="region-filter" class="region-filter">
+                            <option value="">All Regions</option>
+                            <option value="americas">Americas</option>
+                            <option value="europe">Europe</option>
+                            <option value="asia">Asia</option>
+                            <option value="africa">Africa</option>
+                            <option value="oceania">Oceania</option>
+                            <option value="middle-east">Middle East</option>
+                        </select>
+                        <div class="search-input-wrapper">
+                            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="search-input" placeholder="Search country…" autocomplete="off">
+                            <button id="voice-search-btn" class="voice-search-btn" title="Voice search">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23"/>
+                                    <line x1="8" y1="23" x2="16" y2="23"/>
+                                </svg>
+                            </button>
+                            <datalist id="country-list"></datalist>
+                        </div>
+                    </div>
+                    <div id="search-suggestions" class="search-suggestions hidden"></div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="mode-toggle">
+                    <button id="news-mode-btn" class="mode-btn active">News</button>
+                    <button id="radio-mode-btn" class="mode-btn">Radio</button>
+                </div>
+                <button id="settings-btn" class="settings-btn" title="Settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- subtitle kept for JS compatibility but visually hidden -->
+        <span class="subtitle" style="display:none;"></span>
+
+        <div id="globe-container"></div>
+
+        <div id="news-popup" class="news-popup hidden">
+            <div class="popup-header">
+                <h2 id="country-name"></h2>
+                <button id="close-popup" class="close-btn" title="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Station name search — shown only in Radio mode -->
+            <div id="radio-station-search" class="radio-station-search hidden">
+                <div class="station-search-wrap">
+                    <svg class="station-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" id="station-search-input" placeholder="Search all stations…" autocomplete="off">
+                    <button id="station-search-clear" class="station-search-clear hidden" title="Clear">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div id="news-content" class="news-content">
+                <div class="loading">Loading…</div>
+            </div>
+        </div>
+
+        <div id="country-label" class="country-label hidden"></div>
+
+        <div id="legend" class="legend">
+            <div class="legend-title">Map Key</div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: rgba(79,110,247,0.65); border: 2px solid rgba(255,255,255,0.85);"></div>
+                <span>News available</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: rgba(79,110,247,0.2); border: 2px solid rgba(255,255,255,0.35);"></div>
+                <span>No data</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: rgba(251,191,36,0.8); border: 2px solid #fbbf24;"></div>
+                <span>Selected</span>
+            </div>
+        </div>
+
+        <div id="instructions" class="instructions">
+            <p>Drag to rotate · Scroll to zoom · Click a country · ESC to close</p>
+        </div>
+
+        <div id="error-message" class="error-message hidden"></div>
+
+        <!-- Radio Player -->
+        <div id="radio-player" class="radio-player hidden">
+            <div class="player-info">
+                <span id="radio-station-name" class="player-station-name">No station playing</span>
+                <span id="radio-country-name" class="player-country-name"></span>
+            </div>
+            <div class="player-controls">
+                <button id="play-pause-btn" class="player-btn" title="Play / Pause">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                </button>
+                <button id="stop-radio-btn" class="player-btn" title="Stop">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                </button>
+                <div class="volume-control">
+                    <svg id="volume-label" class="volume-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                    </svg>
+                    <input type="range" id="volume-slider" min="0" max="100" value="70" class="volume-slider">
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="settings-modal hidden">
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h2>Settings</h2>
+                    <button id="close-settings" class="close-btn" title="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="settings-body">
+                    <div class="setting-group">
+                        <label class="setting-label">
+                            <span class="setting-name">Temperature Unit</span>
+                        </label>
+                        <select id="temp-unit-select" class="setting-select">
+                            <option value="C">Celsius (°C)</option>
+                            <option value="F">Fahrenheit (°F)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">
+                            <span class="setting-name">Auto-Rotate Globe</span>
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="auto-rotate-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">
+                            <span class="setting-name">Show News Images</span>
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="show-images-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">
+                            <span class="setting-name">Show Cloud Layer</span>
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="show-clouds-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">
+                            <span class="setting-name">Articles Per Country</span>
+                        </label>
+                        <select id="news-count-select" class="setting-select">
+                            <option value="3">3 articles</option>
+                            <option value="5">5 articles</option>
+                            <option value="10">10 articles</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group setting-group--slider">
+                        <label class="setting-label">
+                            <span class="setting-name">Globe Rotation Speed</span>
+                        </label>
+                        <div class="slider-row">
+                            <input type="range" id="rotation-speed" min="0.1" max="1.0" step="0.1" value="0.3" class="setting-slider">
+                            <span id="speed-value" class="slider-value">0.3x</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-footer">
+                    <button id="reset-settings" class="reset-btn">Reset to defaults</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/globe.gl@2.27.1/dist/globe.gl.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
