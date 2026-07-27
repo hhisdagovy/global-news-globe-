@@ -1,5 +1,7 @@
 # 🌍 Global News Globe
 
+https://hhisdagovy.github.io/global-news-globe-/
+
 An interactive 3D spinning globe that displays the top 3 news headlines when you hover over countries. Built with Three.js, Globe.gl, and NewsData.io.
 
 ## Features
